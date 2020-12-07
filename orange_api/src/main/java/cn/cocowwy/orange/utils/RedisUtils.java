@@ -3,12 +3,14 @@ package cn.cocowwy.orange.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 /**
  *
  * 自定义Redis客户端操作工具类
- * 该工具包直允许通过注入的方式获取
+ * 需要使用该工具包涉及RedisTemplate的方法只能
+ * 允许通过注入的方式获取
  * @author Cocowwy
  * @create 2020-12-12-20:58
  */
@@ -32,8 +34,10 @@ public class RedisUtils {
         return jsonTemplate;
     }
 
+
     /**
      * redisKey的生成工具
+     * 该方法可以通过类名.方法名调用
      * @param name
      * @return
      */

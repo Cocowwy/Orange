@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 /**
  * 该工具包用于自动设置默认值
  * 部分数据读取自 Nacos 配置中心
- * 只能通过注入的方式，不然拿到的为null
+ * 只能通过注入的方式，不然拿到的配置值任然为null
  * @author Cocowwy
  * @create 2020-12-12-18:48
  */

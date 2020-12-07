@@ -36,6 +36,7 @@ public class TradeController {
     @PostMapping("/getTrades")
     public List<Trade> getTrades(@RequestParam("userId") Long userId) {
         ITradeOpenServiceDTO.GetOnlineTradeRespDTO onlineTrade = tradeOpenService.getOnlineTrade(userId);
+
         return onlineTrade.getTrades();
     }
 

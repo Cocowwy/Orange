@@ -41,11 +41,13 @@ class OrangeApplicationTests {
      */
     @Test
     void testNacos() {
-        System.out.println(defaultTips);
-        System.out.println(autoSetDefault.setTradeDefault(Trade.builder().build()));
+//        System.out.println(defaultTips);
+//        System.out.println(autoSetDefault.setTradeDefault(Trade.builder().build()));
+//        System.out.println(nacosParam.getDefaultTips());
+//        System.out.println(autoSetDefault.setTradeDefault(Trade.builder().build()));
+//        System.out.println(nacosParam.getWelcome());
         System.out.println(nacosParam.getDefaultTips());
-        System.out.println(autoSetDefault.setTradeDefault(Trade.builder().build()));
-        System.out.println(nacosParam.getWelcome());
+        System.out.println(nacosParam.defaultTips);
     }
 
     /**

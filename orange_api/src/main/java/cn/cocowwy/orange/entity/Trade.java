@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @TableName(value = "t_trade")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Trade extends Model {
     private static final long serialVersionUID = 220312159827965859L;
 
