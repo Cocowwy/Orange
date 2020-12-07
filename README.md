@@ -28,3 +28,4 @@ https://blog.csdn.net/pzzzz_wwy/category_10638289.html
 3.nacos刷新配置不生效 --- 暂未解决  目前仅重启nacos生效 ，网上说原因是因为cglib代理了两次，也有说要用专门的配置类。暂时搁置！ ---目前已解决，莫名其妙的成功了后来
 4.变量读取nacos上的配置不能使用static修饰，不然读取到的值为null
 5.使用redis存储在线订单的时候，如果使用hash来维护，那么hash里面的key的值是无法进行设置过期时间的（过期时间只能设置给顶级的key），于是我改成了使用string来维护在线订单列表
+6.自定义的取Nacos的映射类  所有字段必须以private定义  不然通过就算通过注入的方式拿到之后通过.xxxx取到的值任然为null 只能够提供get方法获取
