@@ -24,9 +24,6 @@ public class LoginController {
     @Autowired
     ILoginOpenService loginOpenService;
 
-
-
-
     /**
      * 登录
      *

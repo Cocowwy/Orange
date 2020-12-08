@@ -3,9 +3,7 @@ package cn.cocowwy.orange.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
@@ -20,6 +18,8 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @Builder
 @TableName(value = "t_user")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends Model {
     private static final long serialVersionUID = 562731082112627804L;
 

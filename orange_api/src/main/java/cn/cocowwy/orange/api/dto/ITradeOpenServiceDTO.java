@@ -1,9 +1,11 @@
 package cn.cocowwy.orange.api.dto;
 
 import cn.cocowwy.orange.entity.Trade;
+import cn.cocowwy.orange.entity.User;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *@author Cocowwy
@@ -36,5 +38,39 @@ public class ITradeOpenServiceDTO {
         private Boolean result;
         private String message;
 
+    }
+
+    /**
+     * 接单接口出参
+     */
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AcceptTradeRespDTO {
+        private Trade trade;
+        private User user;
+    }
+
+    /**
+     * 接单几里路查询接口出参
+     */
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QueryTradeRecordsRespDTO {
+        /**
+         * 已接单
+         */
+        private  List<Map<String,Object>>  inTrade;
+        /**
+         * 派单
+         */
+        private List<Trade> outTrade;
     }
 }

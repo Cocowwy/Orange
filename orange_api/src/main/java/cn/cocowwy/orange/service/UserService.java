@@ -19,4 +19,6 @@ public interface UserService extends IService<User> {
     List<User> queryUserName(String username);
 
     List<User> querUserByWx(String wx);
+
+    List<User> queryByUserId(Long userId);
 }

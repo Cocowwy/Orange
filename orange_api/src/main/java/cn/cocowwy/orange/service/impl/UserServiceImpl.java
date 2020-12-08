@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 用户基本信息表 (User)表服务实现类
  *
- * @author wangwy8@asiainfo.com
+ * @author Cocowwy
  * @since 2020-12-03 14:28:20
  */
 @Service
@@ -45,6 +45,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public List<User> querUserByWx(String wx) {
         return this.list(Wrappers.<User>lambdaQuery()
                 .eq(User::getWxId, wx)
+        );
+    }
+
+    @Override
+    public List<User> queryByUserId(Long userId) {
+        return this.list(Wrappers.<User>lambdaQuery()
+                .eq(User::getUserId, userId)
         );
     }
 

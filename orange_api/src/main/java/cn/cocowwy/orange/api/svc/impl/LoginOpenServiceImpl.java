@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class LoginOpenServiceImpl implements ILoginOpenService {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * 用户登录接口

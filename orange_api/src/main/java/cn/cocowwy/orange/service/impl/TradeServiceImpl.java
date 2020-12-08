@@ -3,9 +3,13 @@ package cn.cocowwy.orange.service.impl;
 import cn.cocowwy.orange.entity.Trade;
 import cn.cocowwy.orange.mapper.TradeMapper;
 import cn.cocowwy.orange.service.TradeService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 订单表(Trade)表服务实现类
@@ -23,4 +27,13 @@ public class TradeServiceImpl extends ServiceImpl<TradeMapper, Trade> implements
         return super.save(dto);
     }
 
+    @Override
+    public boolean updateByTradeId(Long tradeId,Trade trade) {
+        return this.update(trade, Wrappers.<Trade>lambdaQuery().eq(Trade::getTradeId, tradeId));
+    }
+
+    @Override
+    public List<Trade> qureyHisByUserId(Long userId) {
+        return this.list( Wrappers.<Trade>lambdaQuery().eq(Trade::getAcceptUser, userId));
+    }
 }

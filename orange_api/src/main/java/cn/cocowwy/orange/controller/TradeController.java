@@ -36,7 +36,6 @@ public class TradeController {
     @PostMapping("/getTrades")
     public List<Trade> getTrades(@RequestParam("userId") Long userId) {
         ITradeOpenServiceDTO.GetOnlineTradeRespDTO onlineTrade = tradeOpenService.getOnlineTrade(userId);
-
         return onlineTrade.getTrades();
     }
 
@@ -63,7 +62,20 @@ public class TradeController {
      * @param userId  接单用户userId
      * @return
      */
-    public Map<String, Object> addTrade(Long tradeId, Long userId) {
-        return null;
+    @PostMapping("/acceptTrade")
+    public Map<String, Object> acceptTrade(Long tradeId, Long userId) {
+        ITradeOpenServiceDTO.AcceptTradeRespDTO acceptTradeRespDTO = tradeOpenService.acceptTrade(tradeId, userId);
+        return BeanUtil.beanToMap(acceptTradeRespDTO);
+    }
+
+    /**
+     * 查询已接单记录
+     * @param userId
+     * @return
+     */
+    @PostMapping("/queryTradeRecords")
+    public Map<String,Object> queryTradeRecords(Long userId){
+        ITradeOpenServiceDTO.QueryTradeRecordsRespDTO queryTradeRecordsRespDTO = tradeOpenService.queryTradeRecords(userId);
+        return BeanUtil.beanToMap(queryTradeRecordsRespDTO);
     }
 }

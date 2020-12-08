@@ -24,4 +24,18 @@ public interface ITradeOpenService {
      */
     ITradeOpenServiceDTO.AddOnLineTradeRespDTO addOnLineTrade(Trade trade);
 
+    /**
+     * 接单接口
+     * @param tradeId
+     * @param userId
+     * @return
+     */
+    ITradeOpenServiceDTO.AcceptTradeRespDTO acceptTrade(Long tradeId, Long userId);
+
+    /**
+     * 查询订单记录，即未完成的派单，接单，接口
+     * @param userId
+     * @return
+     */
+    ITradeOpenServiceDTO.QueryTradeRecordsRespDTO queryTradeRecords(Long userId);
 }

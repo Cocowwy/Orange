@@ -21,20 +21,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class NacosParam {
     /**
+     * 公告
+     */
+    @Value("${config.bulletin:欢迎来到橙愿！}")
+    public String bulletin;
+
+    /**
      * 小费金额
      */
     @Value("${config.defaultTips:0.5}")
     public Integer defaultTips;
 
     /**
-     * 欢迎标语
-     */
-    @Value("${config.welcome:0.5}")
-    private String welcome;
-
-    /**
      * 默认订单预存货时间
      */
     @Value("${config.tradeAliveHours:2}")
     private Long tradeAliveHours;
+
+    /**
+     * 订单期待完成时限
+     */
+    @Value("${config.tradeLiveHours:6}")
+    private Long tradeLiveHours;
 }
