@@ -2,9 +2,7 @@ package cn.cocowwy.orange.api.svc;
 
 import cn.cocowwy.orange.api.dto.ITradeOpenServiceDTO;
 import cn.cocowwy.orange.entity.Trade;
-import cn.cocowwy.orange.entity.User;
-import cn.cocowwy.orange.utils.RedisUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * 订单类对外提供接口

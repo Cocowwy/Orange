@@ -31,7 +31,7 @@ public class AutoSetDefault {
      * 使其满足存入数据库的条件
      * @return
      */
-    public Trade setTradeDefault(Trade trade) {
+    public void  setTradeDefault(Trade trade) {
         // 初始化订单入库基本默认信息
         // 以下为系统默认
         trade.setTradeId(RandomStrategy.getRandomTradeId());
@@ -42,7 +42,6 @@ public class AutoSetDefault {
         trade.setAliveTime(LocalDateTimeUtil.offset(LocalDateTimeUtil.now(), nacosParam.getTradeAliveHours(), ChronoUnit.HOURS));
         // 以下优先用户设置信息
         trade.setTips(null == trade.getTips() ? nacosParam.getDefaultTips() : trade.getTips());
-        return trade;
     }
 
 

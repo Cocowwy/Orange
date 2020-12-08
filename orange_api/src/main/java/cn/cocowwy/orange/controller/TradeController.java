@@ -56,4 +56,14 @@ public class TradeController {
         ITradeOpenServiceDTO.AddOnLineTradeRespDTO addOnLineTradeRespDTO = tradeOpenService.addOnLineTrade(trade);
         return BeanUtil.beanToMap(addOnLineTradeRespDTO);
     }
+
+    /**
+     * 用户接单
+     * @param tradeId 订单Id
+     * @param userId  接单用户userId
+     * @return
+     */
+    public Map<String, Object> addTrade(Long tradeId, Long userId) {
+        return null;
+    }
 }

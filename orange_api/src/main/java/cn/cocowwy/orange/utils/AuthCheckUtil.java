@@ -43,7 +43,6 @@ public class AuthCheckUtil {
     public static void checkAddLogin(Trade trade) {
         Assert.notBlank(trade.getTitle(), ErrorMsg.ERROR_BLANK_TRADE_TITLE);
         Assert.notBlank(trade.getContent(), ErrorMsg.ERROR_BLANK_TRADE_CONTENT);
-        Assert.notNull(trade.getTips(), ErrorMsg.ERROR_BLANK_TRADE_TIPS);
         Assert.notBlank(trade.getOrderType(), ErrorMsg.ERROR_BLANK_TRADE_ORDER_TYPE);
         Assert.notNull(trade.getCreateUser(), ErrorMsg.ERROR_BLANK_TRADE_CREATE_USER);
     }

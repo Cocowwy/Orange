@@ -4,14 +4,14 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 182.254.228.76:8848
+        server-addr: 输入自己的IP:端口号
         file-extension:  yaml
       discovery:
-        server-addr: 182.254.228.76:8848
+        server-addr: 输入自己的IP:端口号
       sentinel:
         transport:
           #配置sentinel dashboard地址
-          dashboard: 182.254.228.76:8080
+          dashboard: 输入自己的IP:端口号
           #默认8719端口，假如被占用会自动从8719开始依次+1扫描，直至找到未被占用的端口  如果被占用添加 -Dproject.name=xxxx
           port: 8719
   profiles:

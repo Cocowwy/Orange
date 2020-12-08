@@ -35,14 +35,15 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
     @Override
     public ITradeOpenServiceDTO.GetOnlineTradeRespDTO getOnlineTrade(Long userId) {
         // 读取Redis上全部online信息
-        //TODO 造假数据 测试接口前端展示效果
         Set<String> keys = redisUtils.getJsonTemplate().keys("onLineTrade" + "*");
         List<Trade> returnList = new ArrayList<>();
         for (String key : keys) {
             Object o = redisUtils.getJsonTemplate().opsForValue().get(key);
             returnList.add((Trade) o);
-
         }
+
+        //过滤出正常的订单
+        returnList.stream().filter(o -> "0".equals(o.getStatusTag()));
         return ITradeOpenServiceDTO.GetOnlineTradeRespDTO.builder().trades(returnList).build();
     }
 
@@ -69,7 +70,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         }
 
         // 新增默认值
-        Trade defaultTrade = autoSetDefault.setTradeDefault(trade);
+        autoSetDefault.setTradeDefault(trade);
 
         // 入redis
         String key = RedisUtils.getRedisKey("onLineTrade", String.valueOf(trade.getTradeId()));
