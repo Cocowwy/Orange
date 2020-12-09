@@ -89,4 +89,26 @@ public class TradeController {
         ITradeOpenServiceDTO.AccomplishTradeRespDTO accomplishTradeRespDTO = tradeOpenService.accomplishTrade(tradeId);
         return BeanUtil.beanToMap(accomplishTradeRespDTO);
     }
+
+    /**
+     * 用户取消已接单
+     * @param tradeId
+     * @return
+     */
+    @PostMapping("/cancelAcceptTrade")
+    public Map<String, Object> cancelAcceptTrade(Long tradeId) {
+        ITradeOpenServiceDTO.CancelAcceptTradeRespDTO cancelAcceptTrade = tradeOpenService.cancelAcceptTrade(tradeId);
+        return BeanUtil.beanToMap(cancelAcceptTrade);
+    }
+
+    /**
+     * 用户取消已派单
+     * @param tradeId
+     * @return
+     */
+    @PostMapping("/cancelDistributeTrade")
+    public Map<String, Object> cancelDistributeTrade(Long tradeId) {
+        ITradeOpenServiceDTO.CancelDistributeTradeRespDTO cancelDistributeTradeRespDTO = tradeOpenService.cancelDistributeTrade(tradeId);
+        return BeanUtil.beanToMap(cancelDistributeTradeRespDTO);
+    }
 }

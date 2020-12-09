@@ -8,17 +8,22 @@ import cn.cocowwy.orange.service.TradeService;
 import cn.cocowwy.orange.service.UserService;
 import cn.cocowwy.orange.utils.*;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateBetween;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 订单操作对外服务
@@ -91,7 +96,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
 
         // 入redis
         String key = RedisUtils.getRedisKey("onLineTrade", String.valueOf(trade.getTradeId()));
-        redisUtils.getJsonTemplate().opsForValue().set(key, trade, nacosParam.getDefaultTips(), TimeUnit.HOURS);
+        redisUtils.getJsonTemplate().opsForValue().set(key, trade, nacosParam.getTradeAliveHours(), TimeUnit.HOURS);
 
         // 入数据库
         boolean save = tradeService.save(trade);
@@ -164,12 +169,24 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
      */
     @Override
     public ITradeOpenServiceDTO.QueryTradeRecordsRespDTO queryTradeRecords(Long userId) {
+        // 未接单
+        List<Trade> inTrades = new ArrayList<>();
+        // 已接单
+        List<Trade> outTrades = new ArrayList<>();
+
         //拿到redis上的接单信息
         Set<String> keys = redisUtils.getJsonTemplate().keys("acceptTrade" + "*");
-        List<Trade> inTrades = new ArrayList<>();
         for (String key : keys) {
-            inTrades.add((Trade) redisUtils.getJsonTemplate().opsForValue().get(key));
+            // 这里必须判空，不然会报空指针
+            Object o = redisUtils.getJsonTemplate().opsForValue().get(key);
+            if (null != o) {
+                inTrades.add((Trade) o);
+            }
         }
+
+        //用于给outTrade过滤已经派单的订单
+        List<Trade> temp = new ArrayList<>();
+        temp.addAll(inTrades);
 
         // 根据userId和状态进行过滤操作
         inTrades.stream().filter(o -> userId.equals(o.getAcceptUser()) && "1".equals(o.getStatusTag()));
@@ -187,18 +204,19 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
             inMap.add(map);
         }
 
-        // 历史单查询
-        List<Trade> outTrades = tradeService.qureyHisByUserId(userId);
 
         // 读取Redis上全部online信息
+        // 未接单信息
         Set<String> keysOnLine = redisUtils.getJsonTemplate().keys("onLineTrade" + "*");
         for (String key : keysOnLine) {
             Trade trade = (Trade) redisUtils.getJsonTemplate().opsForValue().get(key);
             outTrades.add(trade);
         }
 
-        // 根据userId和状态进行过滤操作
+        // 根据userId和状态进行过滤操作  合并online里面的派单 和accept里面的派单
         outTrades.stream().filter(o -> userId.equals(o.getCreateUser()) && "0".equals(o.getStatusTag()));
+        List<Trade> userOut = temp.stream().filter(o -> userId.equals(o.getCreateUser()) && "1".equals(o.getStatusTag())).collect(Collectors.toList());
+        outTrades.addAll(userOut);
 
         return ITradeOpenServiceDTO.QueryTradeRecordsRespDTO
                 .builder()
@@ -230,6 +248,76 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
                 .builder()
                 .result(true)
                 .message("订单完工！")
+                .build();
+    }
+
+    /**
+     * 取消已接单
+     * @param tradeId
+     * @return
+     */
+    @Override
+    public ITradeOpenServiceDTO.CancelAcceptTradeRespDTO cancelAcceptTrade(Long tradeId) {
+        // 变更状态 移除订单
+        String acceptTradeKey = RedisUtils.getRedisKey("acceptTrade", String.valueOf(tradeId));
+        Trade acceptTrade = (Trade) redisUtils.getByKey(acceptTradeKey);
+        redisUtils.rmvByKey(acceptTradeKey);
+        Assert.notNull(acceptTrade, ErrorMsg.ERROR_OFFLINE_TRADE);
+        acceptTrade.setStatusTag("0");
+        acceptTrade.setChangeTime(LocalDateTime.now());
+        acceptTrade.setAcceptUser(null);
+
+        // 重新入online
+        // 过期时间为 (订单存活时间-订单创建时间)-(用户接单时间-订单创建时间)=订单存活时间-用户接单时间
+        Long onlineTimes = acceptTrade.getAliveTime().toInstant(ZoneOffset.of("+8")).toEpochMilli()
+                - acceptTrade.getAcceptTime().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        String onLineTrade = RedisUtils.getRedisKey("onLineTrade", String.valueOf(tradeId));
+        redisUtils.getJsonTemplate().opsForValue().set(onLineTrade, acceptTrade, onlineTimes, TimeUnit.MILLISECONDS);
+
+        // 更新数据库状态
+        tradeService.updateByTradeId(tradeId, acceptTrade);
+
+        return ITradeOpenServiceDTO.CancelAcceptTradeRespDTO
+                .builder()
+                .result(true)
+                .message("该订单已经取消")
+                .build();
+    }
+
+    /**
+     * 取消已派单
+     * @param tradeId
+     * @return
+     */
+    @Override
+    public ITradeOpenServiceDTO.CancelDistributeTradeRespDTO cancelDistributeTrade(Long tradeId) {
+
+        String onLineTrade = RedisUtils.getRedisKey("onLineTrade", String.valueOf(tradeId));
+        Trade byKey = (Trade) redisUtils.getByKey(onLineTrade);
+        // 不在online 可能在accept
+        if (null == byKey) {
+            String acceptTrade = RedisUtils.getRedisKey("acceptTrade", String.valueOf(tradeId));
+            Trade acpt = (Trade) redisUtils.getByKey(acceptTrade);
+            Assert.notNull(acpt, "该订单已失效或者不存在！");
+            // 移除key 入库
+            redisUtils.rmvByKey(acceptTrade);
+            acpt.setStatusTag("3");
+            acpt.setChangeTime(LocalDateTime.now());
+            tradeService.updateByTradeId(acpt.getTradeId(), acpt);
+            return ITradeOpenServiceDTO.CancelDistributeTradeRespDTO
+                    .builder()
+                    .result(true)
+                    .message("订单号：" + tradeId + "已经成功移除！")
+                    .build();
+        }
+        redisUtils.rmvByKey(onLineTrade);
+        byKey.setStatusTag("3");
+        byKey.setChangeTime(LocalDateTime.now());
+        tradeService.updateByTradeId(byKey.getTradeId(), byKey);
+        return ITradeOpenServiceDTO.CancelDistributeTradeRespDTO
+                .builder()
+                .result(true)
+                .message("订单号：" + tradeId + "已经成功移除！")
                 .build();
     }
 }

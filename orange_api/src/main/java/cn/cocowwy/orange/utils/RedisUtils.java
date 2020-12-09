@@ -42,6 +42,7 @@ public class RedisUtils {
         return jsonTemplate.opsForValue().get(key);
     }
 
+
     /**
      * 通过key删除对象
      */

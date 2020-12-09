@@ -87,4 +87,32 @@ public class ITradeOpenServiceDTO {
         private Boolean result;
         private String message;
     }
+
+    /**
+     * 取消接单出参
+     */
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CancelAcceptTradeRespDTO {
+        private Boolean result;
+        private String message;
+    }
+
+    /**
+     * 取消接单出参
+     */
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CancelDistributeTradeRespDTO {
+        private Boolean result;
+        private String message;
+    }
 }

@@ -45,4 +45,19 @@ public interface ITradeOpenService {
      * @return
      */
     ITradeOpenServiceDTO.AccomplishTradeRespDTO accomplishTrade(Long tradeId);
+
+
+    /**
+     * 取消已接单
+     * @param tradeId
+     * @return
+     */
+    ITradeOpenServiceDTO.CancelAcceptTradeRespDTO cancelAcceptTrade(Long tradeId);
+
+    /**
+     * 取消已派单
+     * @param tradeId
+     * @return
+     */
+    ITradeOpenServiceDTO.CancelDistributeTradeRespDTO cancelDistributeTrade(Long tradeId);
 }

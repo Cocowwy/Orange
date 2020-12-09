@@ -33,7 +33,7 @@ public class NacosParam {
     public Integer defaultTips;
 
     /**
-     * 默认订单预存货时间
+     * 默认订单预存活时间
      */
     @Value("${config.tradeAliveHours:2}")
     private Long tradeAliveHours;
