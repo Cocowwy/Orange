@@ -11,9 +11,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +21,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- *@author Cocowwy
- *@create 2020-12-12-17:35
+ * 订单操作对外服务
+ * @author Cocowwy
+ * @create 2020-12-12-17:35
  */
 @Service
 public class TradeOpenServiceImpl implements ITradeOpenService {
@@ -41,7 +42,11 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
     @Autowired
     private UserService userService;
 
-
+    /**
+     * 得到在线订单列表
+     * @param userId
+     * @return
+     */
     @Override
     public ITradeOpenServiceDTO.GetOnlineTradeRespDTO getOnlineTrade(Long userId) {
         // 读取Redis上全部online信息
@@ -152,6 +157,11 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         return ITradeOpenServiceDTO.AcceptTradeRespDTO.builder().trade(onLineTrade).user(user).build();
     }
 
+    /**
+     * 查询订单记录，即已接单和未完成的派单接口
+     * @param userId
+     * @return
+     */
     @Override
     public ITradeOpenServiceDTO.QueryTradeRecordsRespDTO queryTradeRecords(Long userId) {
         //拿到redis上的接单信息
@@ -164,15 +174,16 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         // 根据userId和状态进行过滤操作
         inTrades.stream().filter(o -> userId.equals(o.getAcceptUser()) && "1".equals(o.getStatusTag()));
 
-         List<Map<String,Object>> inMap=new ArrayList<>();
+        List<Map<String, Object>> inMap = new ArrayList<>();
         for (Trade inTrade : inTrades) {
             List<User> users = userService.queryByUserId(inTrade.getCreateUser());
-            Assert.notNull(users.get(0),"该下单用户信息有误！");
+            Assert.notNull(users.get(0), "该下单用户信息有误！");
             Map<String, Object> map = BeanUtil.beanToMap(inTrade);
-            map.put("name",users.get(0).getName());
-            map.put("address1",users.get(0).getAddress1());
-            map.put("phone",users.get(0).getPhone());
-            map.put("userRealName",users.get(0).getUserRealName());
+            map.put("name", users.get(0).getName());
+            map.put("address1", users.get(0).getAddress1());
+            map.put("phone", users.get(0).getPhone());
+            map.put("userRealName", users.get(0).getUserRealName());
+            map.put("wxId", users.get(0).getWxId());
             inMap.add(map);
         }
 
@@ -193,6 +204,32 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
                 .builder()
                 .inTrade(inMap)
                 .outTrade(outTrades)
+                .build();
+    }
+
+    /**
+     * 订单完成接口
+     * @param tradeId
+     * @return
+     */
+    @Override
+    public ITradeOpenServiceDTO.AccomplishTradeRespDTO accomplishTrade(Long tradeId) {
+
+        // 修改状态 入库
+        String acceptTradeKey = RedisUtils.getRedisKey("acceptTrade", String.valueOf(tradeId));
+        Trade acceptTrade = (Trade) redisUtils.getByKey(acceptTradeKey);
+        Assert.notNull(acceptTrade, ErrorMsg.ERROR_OFFLINE_TRADE);
+        acceptTrade.setStatusTag("2");
+        acceptTrade.setChangeTime(LocalDateTime.now());
+        tradeService.updateByTradeId(acceptTrade.getTradeId(), acceptTrade);
+
+        // redis上删除该信息
+        redisUtils.rmvByKey(acceptTradeKey);
+
+        return ITradeOpenServiceDTO.AccomplishTradeRespDTO
+                .builder()
+                .result(true)
+                .message("订单完工！")
                 .build();
     }
 }

@@ -34,10 +34,25 @@ public class RedisUtils {
         return jsonTemplate;
     }
 
+    /**
+     * 通过key拿到对象
+     * @return
+     */
+    public Object getByKey(String key) {
+        return jsonTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * 通过key删除对象
+     */
+    public Boolean rmvByKey(String key) {
+        return jsonTemplate.delete(key);
+    }
 
     /**
      * redisKey的生成工具
      * 该方法可以通过类名.方法名调用
+     * name:name:name:...
      * @param name
      * @return
      */

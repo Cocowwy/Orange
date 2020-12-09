@@ -33,9 +33,16 @@ public interface ITradeOpenService {
     ITradeOpenServiceDTO.AcceptTradeRespDTO acceptTrade(Long tradeId, Long userId);
 
     /**
-     * 查询订单记录，即未完成的派单，接单，接口
+     * 查询订单记录，即已接单和未完成的派单接口
      * @param userId
      * @return
      */
     ITradeOpenServiceDTO.QueryTradeRecordsRespDTO queryTradeRecords(Long userId);
+
+    /**
+     * 订单完成接口
+     * @param tradeId
+     * @return
+     */
+    ITradeOpenServiceDTO.AccomplishTradeRespDTO accomplishTrade(Long tradeId);
 }

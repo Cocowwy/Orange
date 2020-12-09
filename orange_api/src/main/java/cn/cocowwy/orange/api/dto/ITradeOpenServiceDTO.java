@@ -67,10 +67,24 @@ public class ITradeOpenServiceDTO {
         /**
          * 已接单
          */
-        private  List<Map<String,Object>>  inTrade;
+        private List<Map<String, Object>> inTrade;
         /**
          * 派单
          */
         private List<Trade> outTrade;
+    }
+
+    /**
+     * 订单完工出参
+     */
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccomplishTradeRespDTO {
+        private Boolean result;
+        private String message;
     }
 }

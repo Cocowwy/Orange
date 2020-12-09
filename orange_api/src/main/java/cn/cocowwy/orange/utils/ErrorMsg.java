@@ -24,4 +24,9 @@ public class ErrorMsg {
     public static String ERROR_BLANK_TRADE_TIPS = "订单小费不能空";
     public static String ERROR_BLANK_TRADE_ORDER_TYPE = "订单类型不能为空";
     public static String ERROR_BLANK_TRADE_CREATE_USER = "提交订单用户不能为空";
+
+
+    // 订单状态
+    public static String ERROR_OFFLINE_TRADE = "对不起，该订单已下线";
+
 }

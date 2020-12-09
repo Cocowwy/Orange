@@ -74,8 +74,19 @@ public class TradeController {
      * @return
      */
     @PostMapping("/queryTradeRecords")
-    public Map<String,Object> queryTradeRecords(Long userId){
+    public Map<String, Object> queryTradeRecords(Long userId) {
         ITradeOpenServiceDTO.QueryTradeRecordsRespDTO queryTradeRecordsRespDTO = tradeOpenService.queryTradeRecords(userId);
         return BeanUtil.beanToMap(queryTradeRecordsRespDTO);
+    }
+
+    /**
+     * 用户完成订单
+     * @param tradeId
+     * @return
+     */
+    @PostMapping("/accomplishTrade")
+    public Map<String, Object> accomplishTrade(Long tradeId) {
+        ITradeOpenServiceDTO.AccomplishTradeRespDTO accomplishTradeRespDTO = tradeOpenService.accomplishTrade(tradeId);
+        return BeanUtil.beanToMap(accomplishTradeRespDTO);
     }
 }
