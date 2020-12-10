@@ -34,3 +34,4 @@ https://blog.csdn.net/pzzzz_wwy/category_10638289.html
 5.使用redis存储在线订单的时候，如果使用hash来维护，那么hash里面的key的值是无法进行设置过期时间的（过期时间只能设置给顶级的key），于是我改成了使用string来维护在线订单列表
 6.自定义的取Nacos的映射类  所有字段必须以private定义  不然通过就算通过注入的方式拿到之后通过.xxxx取到的值任然为null 只能够提供get方法获取
 7.Jackson2JsonRedisSerializer序列化后的value之后反序列化回来，之前存储的对象被解析成了LinkedHashMap，且将LocalDateTime解析成了Map对象，解决方法：修改redis的配置类（模板是从网上拷的，jackson2JsonRedisSerializer.setObjectMapper(om);）  具体配置可以参考本项目的RedisConfig！
+8.是项目通过https协议，踩了很多坑，可以参考我的博客
