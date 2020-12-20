@@ -27,6 +27,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public List<User> queryUserByOpenId(String openId) {
+        return this.list(Wrappers.<User>lambdaQuery()
+                .eq(User::getOpenId, openId)
+        );
+    }
+
+    @Override
     public List<User> queryUser(String username, String password) {
         return this.list(Wrappers.<User>lambdaQuery()
                 .eq(User::getUsername, username)

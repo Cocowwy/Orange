@@ -4,6 +4,7 @@ import cn.cocowwy.orange.api.dto.ILoginOpenServiceDTO;
 import cn.cocowwy.orange.api.svc.ILoginOpenService;
 import cn.cocowwy.orange.api.svc.ITradeOpenService;
 import cn.cocowwy.orange.entity.User;
+import cn.cocowwy.orange.utils.WxOpenIdUtil;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,17 @@ import java.util.Map;
 public class LoginController {
     @Autowired
     ILoginOpenService loginOpenService;
+
+    /**
+     * 根据openId进行登录功能
+     * 小程序用户唯一标识
+     * @param code
+     */
+    @PostMapping("/LoginWx")
+    public Map<String, Object> LoginWx(String code) {
+        ILoginOpenServiceDTO.IUserLoginWxRespDTO iUserLoginWxRespDTO = loginOpenService.UserLoginWx(code);
+        return BeanUtil.beanToMap(iUserLoginWxRespDTO);
+    }
 
     /**
      * 登录

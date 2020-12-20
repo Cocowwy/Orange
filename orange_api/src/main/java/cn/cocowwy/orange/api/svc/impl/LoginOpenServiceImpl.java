@@ -6,8 +6,12 @@ import cn.cocowwy.orange.entity.User;
 import cn.cocowwy.orange.service.UserService;
 import cn.cocowwy.orange.utils.AuthCheckUtil;
 import cn.cocowwy.orange.utils.RandomStrategy;
+import cn.cocowwy.orange.utils.WxOpenIdUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.hash.Jackson2HashMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +27,33 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
     private UserService userService;
 
     /**
-     * 用户登录接口
+     * 根据openId 用户登录接口
+     * @param code
+     * @return
+     */
+    @Override
+    public ILoginOpenServiceDTO.IUserLoginWxRespDTO UserLoginWx(String code) {
+        String json = WxOpenIdUtil.getOpenId(code);
+        String openId = String.valueOf(JSONUtil.parse(json).getByPath("openid"));
+        List<User> users = userService.queryUserByOpenId(openId);
+        if (users.size() > 0) {
+            return ILoginOpenServiceDTO.IUserLoginWxRespDTO
+                    .builder()
+                    .message("该用户已经注册！")
+                    .result(true)
+                    .user(users.get(0).setOpenId(null).setPassword(null))
+                    .build();
+        }
+
+        return ILoginOpenServiceDTO.IUserLoginWxRespDTO
+                .builder()
+                .message("该用户未进行注册！")
+                .result(false)
+                .build();
+    }
+
+    /**
+     * 用户登录接口  改为openId方式登录  该登录方式废除
      * 成功则返回用户基本信息
      * @param username
      * @param password
@@ -47,6 +77,7 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
     }
 
     /**
+     * 改为openId方式  该方式废除
      * 用户注册业务接口
      * @param user
      * @return

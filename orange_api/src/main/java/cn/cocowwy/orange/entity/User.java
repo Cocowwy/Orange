@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author wangwy8@asiainfo.com
- * @since 2020-12-03 16:51:39
+ * @since 2020-12-20 23:10:23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends Model {
-    private static final long serialVersionUID = 562731082112627804L;
+    private static final long serialVersionUID = 589077273899699169L;
 
     /**
      * 用户唯一标识 id
@@ -42,16 +42,16 @@ public class User extends Model {
     private String password;
 
     /**
+     * 小程序用户唯一标识id
+     */
+    @TableField("open_id")
+    private String openId;
+
+    /**
      * 用户对外展示昵称
      */
     @TableField("name")
     private String name;
-
-    /**
-     * 用户性别  0女 1男
-     */
-    @TableField("sex")
-    private String sex;
 
     /**
      * 收货地址1
@@ -132,10 +132,22 @@ public class User extends Model {
     private String userRealName;
 
     /**
+     * 用户性别  0女 1男
+     */
+    @TableField("sex")
+    private String sex;
+
+    /**
      * 用户可联系微信号
      */
     @TableField("wx_id")
     private String wxId;
+
+    /**
+     * 用户qq
+     */
+    @TableField("user_qq")
+    private String userQq;
 
     /**
      * 预留字段1
@@ -154,11 +166,5 @@ public class User extends Model {
      */
     @TableField("rsrv_str3")
     private String rsrvStr3;
-
-    /**
-     * 用户qq
-     */
-    @TableField("user_qq")
-    private String userQq;
 
 }

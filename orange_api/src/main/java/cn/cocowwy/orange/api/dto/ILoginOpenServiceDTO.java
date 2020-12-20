@@ -15,6 +15,22 @@ import java.io.Serializable;
 @ToString
 @Builder
 public class ILoginOpenServiceDTO {
+
+    /**
+     * 用户微信openId登录接口出参
+     */
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class IUserLoginWxRespDTO implements Serializable {
+        private User user;
+        private boolean result;
+        private String message;
+    }
+
     /**
      * 用户登录接口出参
      */

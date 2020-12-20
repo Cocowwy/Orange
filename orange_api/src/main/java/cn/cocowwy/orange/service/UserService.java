@@ -14,6 +14,9 @@ import java.util.List;
  * @since 2020-12-03 14:28:20
  */
 public interface UserService extends IService<User> {
+
+    List<User> queryUserByOpenId(String openId);
+
     List<User> queryUser(String username, String password);
 
     List<User> queryUserName(String username);
