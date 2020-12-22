@@ -2,15 +2,12 @@ package cn.cocowwy.orange.controller;
 
 import cn.cocowwy.orange.api.dto.ILoginOpenServiceDTO;
 import cn.cocowwy.orange.api.svc.ILoginOpenService;
-import cn.cocowwy.orange.api.svc.ITradeOpenService;
 import cn.cocowwy.orange.entity.User;
-import cn.cocowwy.orange.utils.WxOpenIdUtil;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 
@@ -36,8 +33,20 @@ public class LoginController {
         return BeanUtil.beanToMap(iUserLoginWxRespDTO);
     }
 
+
     /**
-     * 登录
+     * 根据openId进行用户注册功能
+     * @param user
+     * @return
+     */
+    @PostMapping("/registWx")
+    public Map<String, Object> registWx(User user) {
+        ILoginOpenServiceDTO.UserRegisteredWxRespDTO registeredWxRespDTO = loginOpenService.UserRegisteredWx(user);
+        return null;
+    }
+
+    /**
+     * 登录 该控制层废除 改为openId的方式
      *
      * @param username
      * @param password
@@ -49,7 +58,7 @@ public class LoginController {
     }
 
     /**
-     * 注册
+     * 注册 该控制层废除 改为openId的方式
      */
     @PostMapping("/registered")
     public Map<String, Object> registered(@RequestParam("user") User user) {

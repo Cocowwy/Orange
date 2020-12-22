@@ -48,7 +48,54 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
         return ILoginOpenServiceDTO.IUserLoginWxRespDTO
                 .builder()
                 .message("该用户未进行注册！")
+                .user(User.builder().openId(openId).build())
                 .result(false)
+                .build();
+    }
+
+    /**
+     * 根据openIdopenId 用户注册接口
+     * @param user
+     * @return
+     */
+    @Override
+    public ILoginOpenServiceDTO.UserRegisteredWxRespDTO UserRegisteredWx(User user) {
+        List<User> users = userService.queryUserByOpenId(user.getOpenId());
+        if (users.size() > 0) {
+            return ILoginOpenServiceDTO.UserRegisteredWxRespDTO
+                    .builder()
+                    .message("该用户已经注册！")
+                    .result(false)
+                    .build();
+        }
+
+        // 校验必填字段
+        AuthCheckUtil.checkRegistered(user);
+
+        // 校验其余信息  wx不能二次绑定
+        List<User> userByWx = userService.querUserByWx(user.getWxId());
+        if (userByWx.size() != 0) {
+            return ILoginOpenServiceDTO.UserRegisteredWxRespDTO
+                    .builder()
+                    .result(false)
+                    .message("该微信号已其他账号绑定！")
+                    .build();
+        }
+
+        // 根据自动生成策略自动生成16位userid
+        Long randomUserId = RandomStrategy.getRandomUserId();
+        user.setUserId(randomUserId);
+        boolean save = userService.save(user);
+
+        // 记录注册失败日志
+        if (save == false) {
+            log.info("用户注册信息失败，用户注册提供信息为：" + user);
+        }
+
+        return ILoginOpenServiceDTO.UserRegisteredWxRespDTO
+                .builder()
+                .result(save)
+                .message(save == true ? "用户注册成功" : "用户注册失败，请联系管管理员！")
                 .build();
     }
 

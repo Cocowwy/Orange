@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.IllegalFormatException;
 
 /**
  * 微信openId获取工具类
@@ -38,7 +39,7 @@ public class WxOpenIdUtil {
             }
             return sb.toString();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("服务端获取openId出错");
         } finally {
             try {
                 if (in != null) {

@@ -20,6 +20,14 @@ public interface ILoginOpenService {
 
 
     /**
+     * 根据openId 用户注册接口
+     * @param user
+     * @return
+     */
+    ILoginOpenServiceDTO.UserRegisteredWxRespDTO UserRegisteredWx(User user);
+
+
+    /**
      * 改为openId方式  该方式废除
      * 用户登录接口
      * @param username
