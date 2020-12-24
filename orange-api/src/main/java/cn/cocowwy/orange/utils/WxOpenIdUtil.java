@@ -15,8 +15,8 @@ import java.util.IllegalFormatException;
  */
 public class WxOpenIdUtil {
     public static String getOpenId(String code) {
-        String appid = "wxe3d87671fede012a";
-        String secret = "71f3efa12f3db40cd2b16f5f7d61e338";
+        String appid = "xxxxxxxxxxxxx";
+        String secret = "xxxxxxxxxxxxxx";
 
         //appid和secret是开发者分别是小程序ID和小程序密钥，开发者通过微信公众平台-》设置-》开发设置就可以直接获取，
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid="
