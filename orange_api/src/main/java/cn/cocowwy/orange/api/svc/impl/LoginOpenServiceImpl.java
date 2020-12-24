@@ -5,8 +5,10 @@ import cn.cocowwy.orange.api.svc.ILoginOpenService;
 import cn.cocowwy.orange.entity.User;
 import cn.cocowwy.orange.service.UserService;
 import cn.cocowwy.orange.utils.AuthCheckUtil;
+import cn.cocowwy.orange.utils.ErrorMsg;
 import cn.cocowwy.orange.utils.RandomStrategy;
 import cn.cocowwy.orange.utils.WxOpenIdUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +61,12 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
      * @return
      */
     @Override
-    public ILoginOpenServiceDTO.UserRegisteredWxRespDTO UserRegisteredWx(User user) {
+    public ILoginOpenServiceDTO.UserRegisteredWxRespDTO UserRegisteredWx(User user, String code) {
+        Assert.notNull(code, ErrorMsg.ERROR_BLANK_CODE);
+        String json = WxOpenIdUtil.getOpenId(code);
+        String openId = String.valueOf(JSONUtil.parse(json).getByPath("openid"));
+        Assert.notNull(openId, "用户注册openId获取失败！");
+        user.setOpenId(openId);
         List<User> users = userService.queryUserByOpenId(user.getOpenId());
         if (users.size() > 0) {
             return ILoginOpenServiceDTO.UserRegisteredWxRespDTO

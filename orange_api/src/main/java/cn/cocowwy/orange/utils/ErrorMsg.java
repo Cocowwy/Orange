@@ -14,9 +14,11 @@ public class ErrorMsg {
     public static String ERROR_BLANK_ADDRESS1 = "验收地址不能为空不能为空";
     public static String ERROR_BLANK_SEX = "用户性别不能为空";
     public static String ERROR_BLANK_PHONE = "手机号码不能为空";
-    public static String ERROR_BLANK_SCHOOLNUMBER = "学院名称不能为空";
+    public static String ERROR_BLANK_SCHOOLNUMBER = "校园卡卡号不能为空";
     public static String ERROR_BLANK_USERREALNAME = "用户真实姓名不能为空";
     public static String ERROR_BLANK_WXID = "可联系微信号不能为空";
+
+    public static String ERROR_BLANK_CODE = "微信登录凭证code不能为空";
 
     // 非空Error信息 订单
     public static String ERROR_BLANK_TRADE_TITLE = "订单标题不能为空";

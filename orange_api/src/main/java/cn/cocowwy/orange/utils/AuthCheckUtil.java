@@ -28,7 +28,7 @@ public class AuthCheckUtil {
     }
 
     /**
-     * 登录校验用户名密码非空校验
+     * 登录校验用户名密码非空校验 gender
      * @param username
      * @param password
      */

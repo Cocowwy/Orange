@@ -8,13 +8,15 @@ import java.util.IllegalFormatException;
 
 /**
  * 微信openId获取工具类
+ * 通过该工具类  从小程序端获得到code
+ * 通过微信接口得到用户在小程序登录的唯一表示id
  * @author Cocowwy
  * @create 2020-12-12-22:18
  */
 public class WxOpenIdUtil {
     public static String getOpenId(String code) {
-        String appid = "XXXXXXXXXXXXXXXXXXX"; //填写自己的小程序的
-        String secret = "ZZZZZZZZZZZZZZZZZ";  //填写自己的小程序的
+        String appid = "wxe3d87671fede012a";
+        String secret = "71f3efa12f3db40cd2b16f5f7d61e338";
 
         //appid和secret是开发者分别是小程序ID和小程序密钥，开发者通过微信公众平台-》设置-》开发设置就可以直接获取，
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid="

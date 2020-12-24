@@ -40,13 +40,14 @@ public class LoginController {
      * @return
      */
     @PostMapping("/registWx")
-    public Map<String, Object> registWx(User user) {
-        ILoginOpenServiceDTO.UserRegisteredWxRespDTO registeredWxRespDTO = loginOpenService.UserRegisteredWx(user);
+    public Map<String, Object> registWx(User user, String code) {
+        ILoginOpenServiceDTO.UserRegisteredWxRespDTO registeredWxRespDTO = loginOpenService.UserRegisteredWx(user, code);
         return null;
     }
 
     /**
      * 登录 该控制层废除 改为openId的方式
+     * 废弃
      *
      * @param username
      * @param password
@@ -59,6 +60,9 @@ public class LoginController {
 
     /**
      * 注册 该控制层废除 改为openId的方式
+     * 废弃
+     * @param user
+     * @return
      */
     @PostMapping("/registered")
     public Map<String, Object> registered(@RequestParam("user") User user) {

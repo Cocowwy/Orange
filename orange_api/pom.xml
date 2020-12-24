@@ -128,6 +128,7 @@
 
     </dependencies>
 
+    <!--springcloudAlibaba相关的依赖版本号不需要定义了-->
     <dependencyManagement>
         <dependencies>
             <dependency>

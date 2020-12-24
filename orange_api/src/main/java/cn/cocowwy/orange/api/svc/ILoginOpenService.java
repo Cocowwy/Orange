@@ -24,7 +24,7 @@ public interface ILoginOpenService {
      * @param user
      * @return
      */
-    ILoginOpenServiceDTO.UserRegisteredWxRespDTO UserRegisteredWx(User user);
+    ILoginOpenServiceDTO.UserRegisteredWxRespDTO UserRegisteredWx(User user,String code);
 
 
     /**
