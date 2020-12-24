@@ -8,8 +8,8 @@
         <version>2.2.12.BUILD-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>cn.cocowwy</groupId>
+    <artifactId>api</artifactId>
     <version>orange-0.0.1</version>
     <name>Orange</name>
     <description>Orange</description>
@@ -50,7 +50,6 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.4</version>
         </dependency>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -122,8 +121,6 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-
-
 
 
     </dependencies>
